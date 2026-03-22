@@ -1,0 +1,36 @@
+{
+  "name": "image-bg-remover",
+  "version": "1.0.0",
+  "description": "Remove background from images using AI. Simple web interface + Cloudflare Worker proxy.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/haramerve6-blip/image-bg-remover.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/haramerve6-blip/image-bg-remover/issues"
+  },
+  "homepage": "https://github.com/haramerve6-blip/image-bg-remover#readme",
+  "dependencies": {
+    "@tailwindcss/postcss": "^4.2.2",
+    "autoprefixer": "^10.4.27",
+    "next": "^16.2.1",
+    "postcss": "^8.5.8",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "tailwindcss": "^4.2.2"
+  },
+  "devDependencies": {
+    "@types/node": "25.5.0",
+    "@types/react": "19.2.14",
+    "typescript": "5.9.3"
+  }
+}

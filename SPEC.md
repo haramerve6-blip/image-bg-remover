@@ -2,7 +2,7 @@
 
 ## 1. Overview
 
-- **Type**: Web tool (single page + serverless worker)
+- **Type**: Web application (Next.js full-stack)
 - **Core Function**: Upload image → remove background via AI → download result
 - **Target Users**: Anyone needing quick background removal without Photoshop
 
@@ -14,6 +14,7 @@
 
 - Header with title
 - Upload button (centered, top)
+- Drag & drop support
 - Side-by-side preview: Original | Result
 - Download button appears below result after processing
 
@@ -21,11 +22,11 @@
 
 | Component | States |
 |-----------|--------|
-| Upload Button | Default, Hover |
+| Upload Button | Default, Hover, Active |
 | Preview Boxes | Empty (placeholder), Loaded |
 | Loader | Hidden, Active |
 | Download Button | Hidden, Visible |
-| Error Message | Hidden, Visible |
+| Error Alert | Hidden, Visible |
 
 ### Constraints
 
@@ -37,34 +38,34 @@
 
 ## 3. Architecture
 
-### Frontend (`index.html`)
+### Frontend (`src/app/page.tsx`)
 
-- Pure HTML/CSS/JS, no framework
-- Fetches to Cloudflare Worker
-- Shows original + result side-by-side
+- Next.js 16 App Router component (Client)
+- Fetches to `/api/remove-bg` (same origin)
+- Shows original + result side-by-side with checkerboard bg for transparency
 - Download via blob URL
 
-### Backend (`worker/index.js`)
+### Backend (`src/app/api/remove-bg/route.ts`)
 
-- Cloudflare Worker (ES Module format)
+- Next.js Route Handler (App Router)
 - Receives `multipart/form-data` with `image_file`
 - Forwards to `https://api.remove.bg/v1.0/removebg`
 - Returns PNG image buffer
-- CORS headers for cross-origin requests
+- CORS: same-origin (no cross-origin issues)
 
-### Config (`wrangler.toml`)
+### Config
 
-- Worker name: `image-bg-remover`
-- Secrets: `REMOVE_BG_API_KEY` (via `wrangler secret put`)
+- Environment variables in `.env.local`
+- `REMOVE_BG_API_KEY`: remove.bg API key
 
 ---
 
 ## 4. API
 
-### Worker Endpoint
+### Endpoint
 
 ```
-POST /
+POST /api/remove-bg
 Content-Type: multipart/form-data
 
 Form field: image_file (image file)
@@ -80,16 +81,36 @@ Response: image/png
 
 ---
 
-## 5. Future Expansions (v2)
+## 5. Tech Stack
 
-- [ ] Batch processing
-- [ ] History (Cloudflare R2)
-- [ ] Custom model (rembg) for zero API cost
-- [ ] Additional output formats (JPG with white bg)
-- [ ] API key usage tracking
+- **Framework**: Next.js 16.2.1 (App Router)
+- **Styling**: Tailwind CSS v4
+- **Runtime**: Node.js / Vercel / Cloudflare Pages
 
 ---
 
-## 6. License
+## 6. File Structure
+
+```
+├── src/
+│   └── app/
+│       ├── api/
+│       │   └── remove-bg/
+│       │       └── route.ts    # API route
+│       ├── globals.css         # Tailwind imports
+│       ├── layout.tsx          # Root layout
+│       └── page.tsx            # Main UI
+├── .env.example
+├── package.json
+├── tailwind.config.js
+├── postcss.config.js
+├── README.md
+├── SPEC.md
+└── PRD.md
+```
+
+---
+
+## 7. License
 
 MIT
